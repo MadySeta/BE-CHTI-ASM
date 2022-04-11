@@ -26,13 +26,15 @@ SortieSon dcw 0
 	EXPORT index
 	EXPORT SortieSon
 	EXPORT CallbackSon
+	EXPORT StartSon
+
 	IMPORT Son
 	IMPORT LongueurSon
 	
 	
 CallbackSon proc
 		push {r4,r5,r6,lr}
-		ldr r0, =index
+reprise	ldr r0, =index
 		ldr r3, [r0]
 		
 		ldr r1, =SortieSon
@@ -44,7 +46,7 @@ CallbackSon proc
 		ldr r5, [r4]
 		
 		cmp r3, r5
-		bgt stop
+		bgt tmp
 		
 		ldrsh r6, [r2, r3, lsl#1]
 		;lsr r6, r6, #16
@@ -62,8 +64,21 @@ CallbackSon proc
 		add r3, #1
 		ldr r0, =index
 		str r3, [r0]
+		b stop
+		
+tmp		bl StartSon
+		;ldr r3, [r1]
+		b reprise
 		
 stop	pop {r4, r5, r6,lr}
 		bx lr
 		endp	
-	END	
+		
+StartSon proc
+		ldr r1, =index
+		mov r2, #0
+		str r2, [r1]
+		bx lr
+		endp
+	END
+		

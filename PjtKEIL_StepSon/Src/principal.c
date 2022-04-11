@@ -16,7 +16,7 @@ CLOCK_Configure();
 
 	
 //** Placez votre code là ** //
-Timer_1234_Init_ff(TIM4,  91);
+	Timer_1234_Init_ff(TIM4,  6552); //deuxieme paramètre : Duree_ticks != période
 	
 PWM_Init_ff( TIM3, 3, 720);
 
