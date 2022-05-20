@@ -1,7 +1,8 @@
 	PRESERVE8
 	THUMB   
-		
-
+	
+	EXPORT DFT_ModuleAuCarre
+	
 ; ====================== zone de réservation de données,  ======================================
 ;Section RAM (read only) :
 	area    mesdata,data,readonly
@@ -20,23 +21,74 @@
 ;Section ROM code (read only) :		
 	area    moncode,code,readonly
 ; écrire le code ici
-	
-DFT_ModuleAuCarre proc
-		push{}
-		
-		; créer index a 0, on somme jusqu'à M-1 (cf. cmp et bgt)
-		
-		ldr r4,=TabCos
-		;ldr r5,=TabSin
-		
-		;ldrsh mul2, [tabcos, index, lsl#1 (à vérifier)]
-		;mul1 = x(n) à récup dans LeSignal (index, ldrsh...)
-		;mla dest, mul1, mul2, dest
-		
 
-			
-		pop{}
+; r0 : signal
+; r1 : k
+DFT_ModuleAuCarre proc 
+	; r0 : LeSignal
+	; r1 : k
+	; r2 : TabCos / TabSin
+	; r3 : CalculPartie réelle
+	; r4 : CalculPartie imaginaire
+	
+	
+		push{r3, r4, lr}
+		push {r0,r1}
+	    ldr r2, =TabCos
+		bl CalculPartie ; réelle
+		mov r3,r0
+		pop {r0,r1}
+		ldr r2, =TabSin
+		push {r3}
+		bl CalculPartie ; imaginaire
+		pop {r3}
+		mov r4, r0
+		
+		smull r1, r0, r3, r3 ; Xreel² dans r0 (MSB) et r1 (LSB)
+		smlal r1, r0, r4, r4 ; Ximg² + Xreel² (r0 et r1)
+		; return r0 = 32 MSB
+		; sinon, SMMLA ?
+		pop{r3, r4, lr}
+		bx lr
 		endp
+	
+; r0 : signal
+; r1 : k
+; r2 : TabCos / TabSin
+CalculPartie proc
+	; r0 : LeSignal
+	; r1 : k
+	; r2 : TabCos / TabSin 
+	; r3 : x(n)
+	; r4 : résultat
+	; r5 : borne max 64
+	; r6 : TabCos/Sin(k*n)
+	; r7 : n
+	; r8 : k*n
+	
+		push{r4-r8, lr}	
+		mov r7, #0  ;n
+		mov r4, #0  ;resultat reel
+		mov r5, #64
+	
+debut
+		cmp r7, r5
+		bge fin
+		
+		mul r8, r1, r7 ; k*n
+		and r8,#63 ; modulo
+		ldrsh r3, [r0, r7, lsl#1] ; x(n)
+		ldrsh r6, [r2, r8, lsl#1] ; TabCos/Sin(k*n)
+		mla r4, r3, r6, r4  ;mla dest, mul1, mul2, add
+		add r7, #1
+		b debut
+
+fin	
+		mov r0, r4
+		pop{r4-r8, lr}
+		bx lr
+		endp
+
 
 
 ;Section ROM code (read only) :		

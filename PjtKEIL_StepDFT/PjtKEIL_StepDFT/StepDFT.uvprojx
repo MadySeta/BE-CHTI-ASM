@@ -10,7 +10,7 @@
       <TargetName>Simu</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>5060750::V5.06 update 6 (build 750)::.\ARMCC</pCCUsed>
+      <pCCUsed>5060960::V5.06 update 7 (build 960)::.\ARMCC</pCCUsed>
       <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
@@ -387,11 +387,6 @@
               <FileName>principal.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Src\principal.c</FilePath>
-            </File>
-            <File>
-              <FileName>signal.s</FileName>
-              <FileType>2</FileType>
-              <FilePath>.\signal.s</FilePath>
             </File>
             <File>
               <FileName>DFT.s</FileName>
@@ -811,11 +806,6 @@
               <FileName>principal.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Src\principal.c</FilePath>
-            </File>
-            <File>
-              <FileName>signal.s</FileName>
-              <FileType>2</FileType>
-              <FilePath>.\signal.s</FilePath>
             </File>
             <File>
               <FileName>DFT.s</FileName>
@@ -1304,11 +1294,6 @@
               <FileName>principal.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Src\principal.c</FilePath>
-            </File>
-            <File>
-              <FileName>signal.s</FileName>
-              <FileType>2</FileType>
-              <FilePath>.\signal.s</FilePath>
             </File>
             <File>
               <FileName>DFT.s</FileName>
